@@ -206,7 +206,7 @@ T Endian::fromLittleEndian(const void* data)
 template<typename T>
 T Endian::fromLittleEndian(T data)
 {
-	return Endian::fromBigEndian<T>(&data);
+	return Endian::fromLittleEndian<T>(&data);
 }
 
 template<typename T>
@@ -238,14 +238,14 @@ void Endian::toLittleEndian(const void* data, size_t size, void* buffer)
 template<typename T>
 void Endian::toLittleEndian(T data, void* buffer)
 {
-	Endian::toBigEndian<T>(&data, 1, buffer);
+	Endian::toLittleEndian<T>(&data, 1, buffer);
 }
 
 template<typename T>
 T Endian::toLittleEndian(T data)
 {
 	T value;
-	Endian::toBigEndian<T>(data, &value);
+	Endian::toLittleEndian<T>(data, &value);
 	return value;
 }
 

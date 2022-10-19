@@ -34,6 +34,7 @@ public:
 		Write_IsBusy = 0,
 		Write_DataIsNullptr,
 		Write_DataSizeIsZero,
+		Write_DataNot8ByteAligned,
 		Write_DataNot4ByteAligned,
 		Write_DataNot2ByteAligned,
 		Write_HalError,
@@ -57,16 +58,16 @@ public:
 	 * @param size Flash size in kBytes
 	 * @param voltageRange Operating voltage range. See microcontroller user manual
 	 * for HAL and LL drivers in flash extension driver section.
-	 * @param dualBankMode \c true for using an microcontroller with activated dual bank flash.
+	 * @param bank Flash bank which is used.
 	 */
-	Stm32Flash(uint16_t size, uint32_t voltageRange, bool dualBankMode = false);
+	Stm32Flash(uint16_t size, uint32_t voltageRange, size_t bank = 0);
 
 	/**
 	 * @brief Constructor.
 	 * @param size Flash size in kBytes
-	 * @param dualBankMode \c true for using an microcontroller with activated dual bank flash.
+	 * @param bank Flash bank which is used.
 	 */
-	explicit Stm32Flash(uint16_t size, bool dualBankMode = false);
+	explicit Stm32Flash(uint16_t size, size_t bank = 0);
 	/**
 	 * @copydoc Flash::write()
 	 * @throws Write_IsBusy If this is busy.
@@ -125,7 +126,7 @@ private:
 	static Stm32Flash* m_flash;
 	const uint32_t m_voltageRange;
 	const uint16_t m_size;
-	const bool m_dualBank;
+	const size_t m_bank;
 	bool m_isBusy = false;
 
 	bool m_eraseIsRunning = false;

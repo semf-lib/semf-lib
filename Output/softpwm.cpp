@@ -36,6 +36,10 @@ void SoftPwm::set(unsigned int value, bool inverted)
 	SEMF_INFO("set value to %u and inverted to %d", value, inverted);
 	m_pwmValue = value;
 	m_out.setInverted(inverted);
+	if (!m_pwmCycleTimer.isRunning())
+	{
+		startOnTime();
+	}
 }
 
 unsigned int SoftPwm::value() const

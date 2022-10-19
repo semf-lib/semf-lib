@@ -23,6 +23,12 @@
 #include <stm32f0xx.h>
 #endif
 
+#if defined(STM32G0B1xx)
+#define STM32
+#define STM32G0
+#include <stm32g0xx.h>
+#endif
+
 #if	defined(STM32F100xB) || defined(STM32F100xE) || defined(STM32F101x6) || \
 	defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || defined(STM32F103x6) || \

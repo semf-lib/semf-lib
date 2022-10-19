@@ -19,7 +19,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 namespace semf
 {
-LinkedQueue<Stm32ExternalInterrupt> Stm32ExternalInterrupt::m_queue;
 Stm32ExternalInterrupt::Stm32ExternalInterrupt(uint32_t externalInterruptPort, uint32_t externalInterruptPinLine)
 	:m_externalInterruptPort(externalInterruptPort),
 	 m_handle{externalInterruptPinLine, nullptr}

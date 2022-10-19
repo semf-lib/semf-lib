@@ -70,8 +70,6 @@ public:
 	/**Emitted when any error occurs.*/
 
 private:
-    /**List for all external interrupts.*/
-    static LinkedQueue<Stm32ExternalInterrupt> m_queue;
 	/**Port number.*/
     uint32_t m_externalInterruptPort;
     /**Handler for the external interrupt.*/
