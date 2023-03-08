@@ -1,5 +1,5 @@
 # semf - smart embedded framework
-With the semf middleware library a lots of helpful modules and interfaces stand ready for your embedded projects. Because of the platform independency of all components, the source code can easily reused and projects can be ported so to say effortless.
+With the semf middleware library a lot of helpful modules and interfaces stand ready for your embedded projects. Because of the platform independency of all components, the source code can easily reused and projects can be ported so to say effortless.
 
 ## Characterizion
 * Real C++ object orientation with open class architecture
