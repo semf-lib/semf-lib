@@ -1,10 +1,12 @@
 # Changelog
 
+## v24.4.1
+* No auto deploy github, pipeline creates release repository
+
 ## v24.4.0
 * Added github push test in pipeline
 * Pipeline improvements
 * Changed image for doc-builds
-* No auto deploy github, pipeline creates release repositories
 
 ## v24.3.0
 * Fixed AnalogDmaSensor buffer handing over

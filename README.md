@@ -15,7 +15,7 @@ With the semf middleware library lot of helpful modules and interfaces stand rea
 * Fewer complaints and therefore happier customers
 * Happier, more productive developers who enjoy coding more
 
-To start using semf, see the [Documentation](https://github.com/semf-lib/semf-doc/index.html).
+To start using semf, see the [Documentation](https://software.querdenkerengineering.de/semf-doc).
 
 ## Licensing
 semf is available for commercial and non commercial usage under the following licenses:
