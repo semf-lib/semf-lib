@@ -1,0 +1,46 @@
+/**
+ * @file bit
+ * @date 11.02.2022
+ * @author jh
+ * @copyright Copyright (C) querdenker engineering GmbH - All Rights Reserved
+ *            For detailed information, read the license file in
+ *            the project root directory
+ */
+
+#ifndef SEMF_UTILS_PROCESSING_STDWORKAROUNDS_ALGORITHM_
+#define SEMF_UTILS_PROCESSING_STDWORKAROUNDS_ALGORITHM_
+
+#include <algorithm>
+
+namespace semf
+{
+/**
+ * @brief Constexpr function for reversing the byte order of a type at compile time.
+ * @note C++20's constexpr-everything-approach makes this function obsolete. Use \c std::reverse if you can.
+ * @tparam T Reversed type.
+ * @param begin Start address of the value to reverse (inklusive).
+ * @param end Start address of the value to reverse (exclusive).
+ * @return constexpr T reverted value.
+ */
+template <typename T>
+constexpr T reverse(uint8_t* begin, uint8_t* end)
+{
+	union DataMap
+	{
+		constexpr DataMap()
+		: bytes{0}
+		{
+		}
+		T value;
+		uint8_t bytes[sizeof(T)];
+	};
+
+	DataMap data;
+	for (; begin != end; begin++)
+	{
+		data.bytes[sizeof(data) - (end - begin)] = *begin;
+	}
+	return data.value;
+}
+}  // namespace semf
+#endif  // SEMF_UTILS_PROCESSING_STDWORKAROUNDS_ALGORITHM_

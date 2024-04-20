@@ -1,0 +1,46 @@
+/**
+ * @file bit
+ * 
+ * @date 30.07.2021
+ * @author jh
+ * @copyright Copyright (C) querdenker engineering GmbH - All Rights Reserved
+ *            For detailed information, read the license file in
+ *            the project root directory
+ */
+
+#ifndef UTILS_PROCESSING_STDWORKAROUNDS_BIT_
+#define UTILS_PROCESSING_STDWORKAROUNDS_BIT_
+#include <cstdint>
+#if __cplusplus > 201703L
+#include <bit>
+#else
+namespace std
+{
+/**
+ * @brief This enum is part of the C++20 standard. In case this standard is not available, we define it ourself. It supports MSVC, GCC and clang.
+ */
+enum class endian
+{
+	#ifdef __GNUG__
+		little = __ORDER_LITTLE_ENDIAN__,
+		big = __ORDER_BIG_ENDIAN__,
+		native = __BYTE_ORDER__
+	#elif defined(__clang__)
+		little = 0xDEAD,
+		big = 0xFACE,
+		#if defined(_LIBCPP_LITTLE_ENDIAN)
+			native = little
+		#elif defined(_LIBCPP_BIG_ENDIAN)
+			native = big
+		#else
+			native = 0xCAFE
+		#endif
+	#elif defined(_WIN32)
+		little = 0,
+		big = 1,
+		native = little
+	#endif
+};
+}  // namespace std
+#endif
+#endif  // UTILS_PROCESSING_ENDIAN_STDWORKAROUNDS_BIT_
