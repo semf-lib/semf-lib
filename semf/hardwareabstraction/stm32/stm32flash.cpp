@@ -151,7 +151,8 @@ void Stm32Flash::erase(size_t sector, size_t numOfSectors)
 		m_flash->error(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Erase_IsBusy)));
 		return;
 	}
-	if (sector >= numberOfSectors())  // bad error handeling
+
+	if (sector + numOfSectors - 1 >= numberOfSectors())
 	{
 		SEMF_ERROR("sector %u is out of range", sector);
 		m_flash->error(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Erase_SectorOutOfBounds)));
@@ -168,10 +169,15 @@ void Stm32Flash::erase(size_t sector, size_t numOfSectors)
 	eraseinit.TypeErase = FLASH_TYPEERASE_PAGES;
 	eraseinit.PageAddress = address(sector);
 	eraseinit.NbPages = numOfSectors;
-#elif defined(STM32G0)
+#elif defined(STM32G0) || defined(STM32G4)
 	eraseinit.TypeErase = FLASH_TYPEERASE_PAGES;
 	eraseinit.Banks = m_bank;
 	eraseinit.Page = sector;
+	eraseinit.NbPages = numOfSectors;
+#elif defined(STM32U5)
+	eraseinit.TypeErase = FLASH_TYPEERASE_PAGES;
+	eraseinit.Page = sector;
+	eraseinit.Banks = m_bank;
 	eraseinit.NbPages = numOfSectors;
 #else
 	eraseinit.TypeErase = FLASH_TYPEERASE_SECTORS;
@@ -209,7 +215,7 @@ bool Stm32Flash::isBusy() const
 
 void Stm32Flash::write()
 {
-#if defined(STM32G0)
+#if defined(STM32G0) || defined(STM32G4) || defined(STM32U5)
 	if (m_bytesToWrite % 8 != 0)
 	{
 		m_isBusy = false;
@@ -237,27 +243,37 @@ void Stm32Flash::write()
 	}
 #endif
 
+#if defined(STM32U5)
+	HAL_StatusTypeDef state = HAL_StatusTypeDef::HAL_OK;
+	if (m_bytesToWrite >= sizeof(uint64_t) * 2)
+	{
+		m_bytesToWrite -= sizeof(uint64_t) * 2;
+		state = HAL_FLASH_Program_IT(FLASH_TYPEPROGRAM_QUADWORD, m_addressWrite, reinterpret_cast<uint32_t>(m_dataWrite));
+	}
+#else
 	HAL_StatusTypeDef state = HAL_StatusTypeDef::HAL_OK;
 	if (m_bytesToWrite >= sizeof(uint64_t))
 	{
 		m_bytesToWrite -= sizeof(uint64_t);
 		state = HAL_FLASH_Program_IT(FLASH_TYPEPROGRAM_DOUBLEWORD, m_addressWrite, *reinterpret_cast<uint32_t*>(m_dataWrite));
 	}
-#if !defined(STM32G0)
+#endif
+
+#if !defined(STM32U5) && !defined(STM32G0) && !defined(STM32G4)
 	else if (m_bytesToWrite >= sizeof(uint32_t))
 	{
 		m_bytesToWrite -= sizeof(uint32_t);
 		state = HAL_FLASH_Program_IT(FLASH_TYPEPROGRAM_WORD, m_addressWrite, *reinterpret_cast<uint32_t*>(m_dataWrite));
 	}
 #endif
-#if !defined(STM32L0) && !defined(STM32F0) && !defined(STM32G0)
+#if !defined(STM32U5) && !defined(STM32L0) && !defined(STM32F0) && !defined(STM32G0) && !defined(STM32G4)
 	else if (m_bytesToWrite >= sizeof(uint16_t))
 	{
 		m_bytesToWrite -= sizeof(uint16_t);
 		state = HAL_FLASH_Program_IT(FLASH_TYPEPROGRAM_HALFWORD, m_addressWrite, *reinterpret_cast<uint16_t*>(m_dataWrite));
 	}
 #endif
-#if !defined(STM32L0) && !defined(STM32F0) && !defined(STM32F1) && !defined(STM32F3) && !defined(STM32G0)
+#if !defined(STM32U5) && !defined(STM32L0) && !defined(STM32F0) && !defined(STM32F1) && !defined(STM32F3) && !defined(STM32G0) && !defined(STM32G4)
 	else if (m_bytesToWrite == sizeof(uint8_t))
 	{
 		m_bytesToWrite--;
@@ -307,12 +323,26 @@ void Stm32Flash::isr()
 #if defined(STM32G0)
 	if (pFlash.ProcedureOnGoing != FLASH_TYPENONE)
 		return;
+#elif defined(STM32U5)
+	if (pFlash.ProcedureOnGoing != 0U)
+		return;
 #else
 	if (pFlash.ProcedureOnGoing != FLASH_PROC_NONE)
 		return;
 #endif
 
 	HAL_StatusTypeDef state = HAL_StatusTypeDef::HAL_OK;
+
+#if defined(STM32U5)
+	constexpr size_t uint128size = sizeof(uint64_t) * 2;
+	if (m_flash->m_bytesToWrite >= uint128size)
+	{
+		m_flash->m_bytesToWrite -= uint128size;
+		m_flash->m_dataWrite += uint128size;
+		m_flash->m_addressWrite += uint128size;
+		state = HAL_FLASH_Program_IT(FLASH_TYPEPROGRAM_QUADWORD, m_flash->m_addressWrite, reinterpret_cast<uint32_t>(m_flash->m_dataWrite));
+	}
+#else
 	if (m_flash->m_bytesToWrite >= sizeof(uint64_t))
 	{
 		m_flash->m_bytesToWrite -= sizeof(uint64_t);
@@ -320,7 +350,8 @@ void Stm32Flash::isr()
 		m_flash->m_addressWrite += sizeof(uint64_t);
 		state = HAL_FLASH_Program_IT(FLASH_TYPEPROGRAM_DOUBLEWORD, m_flash->m_addressWrite, *reinterpret_cast<uint32_t*>(m_flash->m_dataWrite));
 	}
-#if !defined(STM32G0)
+#endif
+#if !defined(STM32U5) && !defined(STM32G0) && !defined(STM32G4)
 	if (m_flash->m_bytesToWrite >= sizeof(uint32_t))
 	{
 		m_flash->m_bytesToWrite -= sizeof(uint32_t);
@@ -329,7 +360,7 @@ void Stm32Flash::isr()
 		state = HAL_FLASH_Program_IT(FLASH_TYPEPROGRAM_WORD, m_flash->m_addressWrite, *reinterpret_cast<uint32_t*>(m_flash->m_dataWrite));
 	}
 #endif
-#if !defined(STM32L0) && !defined(STM32F0) && !defined(STM32G0)
+#if !defined(STM32U5) && !defined(STM32L0) && !defined(STM32F0) && !defined(STM32G0) && !defined(STM32G4)
 	else if (m_flash->m_bytesToWrite >= sizeof(uint16_t))
 	{
 		m_flash->m_bytesToWrite -= sizeof(uint16_t);
@@ -338,7 +369,7 @@ void Stm32Flash::isr()
 		state = HAL_FLASH_Program_IT(FLASH_TYPEPROGRAM_HALFWORD, m_flash->m_addressWrite, *reinterpret_cast<uint16_t*>(m_flash->m_dataWrite));
 	}
 #endif
-#if !defined(STM32L0) && !defined(STM32F0) && !defined(STM32F1) && !defined(STM32F3) && !defined(STM32G0)
+#if !defined(STM32U5) && !defined(STM32L0) && !defined(STM32F0) && !defined(STM32F1) && !defined(STM32F3) && !defined(STM32G0) && !defined(STM32G4)
 	else if (m_flash->m_bytesToWrite == sizeof(uint8_t))
 	{
 		m_flash->m_bytesToWrite--;

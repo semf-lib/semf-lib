@@ -31,6 +31,8 @@ public:
 		RisingAndFallingEdge
 	};
 
+	InputCapture() = default;
+	explicit InputCapture(const InputCapture& other) = delete;
 	virtual ~InputCapture() = default;
 
 	/**

@@ -21,6 +21,8 @@ namespace semf
 class CommunicationHardwareAsynchronous : public CommunicationHardware
 {
 public:
+	CommunicationHardwareAsynchronous() = default;
+	explicit CommunicationHardwareAsynchronous(const CommunicationHardwareAsynchronous& other) = delete;
 	virtual ~CommunicationHardwareAsynchronous() = default;
 
 	Type type() const override

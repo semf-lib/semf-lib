@@ -70,6 +70,8 @@ public:
 		TiAds1115,
 		TiDrv425,
 		UartHardware,
+		OneWireMaster,
+		OneWireMasterUart,
 
 		SectionHardwareBegin = 0x08000000,
 
@@ -98,6 +100,8 @@ public:
 		SectionCriticalSectionBegin,
 		SectionCriticalSectionEnd,
 
+		Stm32Encoder,
+
 		SectionExternalInterruptBegin,
 		Stm32ExternalInterrupt,
 		NetX90ExternalInterrupt,
@@ -121,6 +125,8 @@ public:
 		Stm32F7I2cMaster,
 		Stm32I2cMaster,
 		Stm32L0I2cMaster,
+		Stm32G0I2cMaster,
+		Stm32G4I2cMaster,
 		Esp32I2cMaster,
 		NetX90I2cMaster,
 		VirtualI2cMasterHardware,
@@ -133,6 +139,7 @@ public:
 		Stm32F7I2cSlave,
 		Stm32I2cSlave,
 		Stm32L0I2cSlave,
+		Stm32G0I2cSlave,
 		SectionI2cSlaveEnd,
 
 		SectionInputCaptureBegin,
@@ -153,13 +160,16 @@ public:
 		SectionRtcEnd,
 
 		SectionSpiMasterBegin,
+		Esp32SpiMaster,
 		Stm32SpiMaster,
+		Stm32SpiMasterDma,
 		NetX90SpiMaster,
 		VirtualSpiMasterHardware,
 		SectionSpiMasterEnd,
 
 		SectionSpiSlaveBegin,
 		Stm32SpiSlave,
+		Stm32SpiSlaveDma,
 		SectionSpiSlaveEnd,
 
 		SectionTimerBegin,

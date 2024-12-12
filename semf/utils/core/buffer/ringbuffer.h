@@ -60,7 +60,7 @@ public:
 	 * @note Using this function while \c USE_SEMF_DEBUG or \c DEBUG being defined will cause a boundary check. In case of failing the boundary check the
 	 *       function will dereference a \c nullptr in order to crash the software forcefully.
 	 */
-	virtual T& operator[](size_t pos) const;
+	T& operator[](size_t pos) const override;
 	/**
 	 * @brief Returns if the buffer is full.
 	 * @note If the buffer is full use \c get() to free a buffer entry place before \c put().
@@ -142,7 +142,7 @@ T& RingBuffer<T>::operator[](size_t pos) const
 #endif
 
 	CriticalSection::enter();
-	size_t readPos = (m_readPos + pos) % this->size();
+	size_t readPos = (m_readPos + pos + 1) % this->size();
 	T& data = this->data()[readPos];
 	CriticalSection::exit();
 

@@ -15,18 +15,20 @@
 #if defined(STM32) && defined(HAL_SPI_MODULE_ENABLED)
 namespace semf
 {
-Stm32SpiMaster::Stm32SpiMaster(SPI_HandleTypeDef& hwHandle, uint32_t spiClockFrequencyHz)
+Stm32SpiMaster::Stm32SpiMaster(SPI_HandleTypeDef& hwHandle, uint32_t spiClockFrequencyHz, bool useDma)
 : m_hwHandle(&hwHandle),
-  m_spiClockFrequencyHz(spiClockFrequencyHz)
+  m_spiClockFrequencyHz(spiClockFrequencyHz),
+  m_useDma{useDma}
 {
 	queue()->push(*this);
 	aborted.connect(m_abortedSlot);
 }
 
-Stm32SpiMaster::Stm32SpiMaster(SPI_HandleTypeDef& hwHandle, Gpio& chipSelectPin, uint32_t spiClockFrequencyHz)
+Stm32SpiMaster::Stm32SpiMaster(SPI_HandleTypeDef& hwHandle, Gpio& chipSelectPin, uint32_t spiClockFrequencyHz, bool useDma)
 : SpiMasterHardware(chipSelectPin),
   m_hwHandle(&hwHandle),
-  m_spiClockFrequencyHz(spiClockFrequencyHz)
+  m_spiClockFrequencyHz(spiClockFrequencyHz),
+  m_useDma{useDma}
 {
 	queue()->push(*this);
 	aborted.connect(m_abortedSlot);
@@ -188,7 +190,7 @@ void Stm32SpiMaster::isrRead(SPI_HandleTypeDef& spi)
 	m_dataIndex++;
 
 	// Problem in HAL_SPI_Receive, so we always do one byte after the other
-	if (m_dataIndex < m_dataSize)
+	if (m_dataIndex < m_dataSize && !m_useDma)
 	{
 		readNext();
 	}
@@ -219,7 +221,7 @@ void Stm32SpiMaster::isrWrittenAndRead(SPI_HandleTypeDef& spi)
 	m_dataIndex++;
 
 	// Problem in HAL_SPI_Transmit, so we always do one byte after the other
-	if (m_dataIndex < m_dataSize)
+	if (m_dataIndex < m_dataSize && !m_useDma)
 	{
 		writeReadNext();
 	}
@@ -255,7 +257,15 @@ void Stm32SpiMaster::writeHardware(const uint8_t data[], size_t dataSize)
 {
 	SEMF_INFO("data %p, size %u", data, dataSize);
 	__HAL_UNLOCK(m_hwHandle);
-	HAL_StatusTypeDef state = HAL_SPI_Transmit_IT(m_hwHandle, const_cast<uint8_t*>(data), static_cast<uint16_t>(dataSize));
+	HAL_StatusTypeDef state = HAL_OK;
+	if (m_useDma)
+	{
+		state = HAL_SPI_Transmit_DMA(m_hwHandle, const_cast<uint8_t*>(data), static_cast<uint16_t>(dataSize));
+	}
+	else
+	{
+		state = HAL_SPI_Transmit_IT(m_hwHandle, const_cast<uint8_t*>(data), static_cast<uint16_t>(dataSize));
+	}
 	if (state != HAL_OK)
 	{
 		if (state == HAL_ERROR)
@@ -398,7 +408,15 @@ void Stm32SpiMaster::readNext()
 {
 	SEMF_INFO("read next");
 	__HAL_UNLOCK(m_hwHandle);
-	HAL_StatusTypeDef state = HAL_SPI_Receive_IT(m_hwHandle, &m_readData[m_dataIndex], 1);
+	HAL_StatusTypeDef state = HAL_OK;
+	if (m_useDma)
+	{
+		state = HAL_SPI_Receive_DMA(m_hwHandle, m_readData, static_cast<uint16_t>(m_dataSize));
+	}
+	else
+	{
+		state = HAL_SPI_Receive_IT(m_hwHandle, &m_readData[m_dataIndex], 1);
+	}
 	if (state != HAL_OK)
 	{
 		if (state == HAL_ERROR)
@@ -424,7 +442,15 @@ void Stm32SpiMaster::writeReadNext()
 {
 	SEMF_INFO("write / read next");
 	__HAL_UNLOCK(m_hwHandle);
-	HAL_StatusTypeDef state = HAL_SPI_TransmitReceive_IT(m_hwHandle, const_cast<uint8_t*>(&m_writeData[m_dataIndex]), &m_readData[m_dataIndex], 1);
+	HAL_StatusTypeDef state = HAL_OK;
+	if (m_useDma)
+	{
+		state = HAL_SPI_TransmitReceive_DMA(m_hwHandle, const_cast<uint8_t*>(m_writeData), m_readData, static_cast<uint16_t>(m_dataSize));
+	}
+	else
+	{
+		state = HAL_SPI_TransmitReceive_IT(m_hwHandle, const_cast<uint8_t*>(&m_writeData[m_dataIndex]), &m_readData[m_dataIndex], 1);
+	}
 	if (state != HAL_OK)
 	{
 		if (state == HAL_ERROR)

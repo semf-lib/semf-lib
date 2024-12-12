@@ -114,10 +114,8 @@ public:
 	 * @param level Level of log message.
 	 * @param name Name of the class and function.
 	 * @param format Printf string format.
-	 * @param args Printf argument list.
 	 */
-	template <class... Args>
-	static void print(T& object, DebugLevel level, const char* name, const char* format, Args... args);
+	static void print(T& object, DebugLevel level, const char* name, const char* format, ...);
 
 private:
 	/**
@@ -158,9 +156,9 @@ DebugLevel Debug<T>::m_debugClassMaxLevel = DebugLevel::DebuglevelIgnore;
 
 template <class T>
 Debug<T>::Debug(T& object, DebugLevel level, const char* name)
-: m_object(object),
-  m_level(level),
-  m_name(name)
+	: m_object(object),
+	  m_level(level),
+	  m_name(name)
 {
 	m_list.pushFront(*this);
 }
@@ -185,12 +183,14 @@ void Debug<T>::setDisabled(bool disable)
 }
 
 template <class T>
-template <class... Args>
-void Debug<T>::print(T& object, DebugLevel level, const char* name, const char* format, Args... args)
+void Debug<T>::print(T& object, DebugLevel level, const char* name, const char* format, ...)
 {
 	// Returning for nothing to debug
 	if (m_list.empty() && !m_debugClass)
 		return;
+
+	va_list arguments;
+	va_start(arguments, format);
 
 	// Checking all registered objects
 	for (auto& it : m_list)
@@ -198,8 +198,9 @@ void Debug<T>::print(T& object, DebugLevel level, const char* name, const char* 
 		if (&object == &it.m_object && level <= it.m_level && it.m_isEnabled)
 		{
 			printf("%s %s %s: ", name, it.m_name, levelText(level));
-			printf(format, args...);
+			vprintf(format, arguments);
 			printf("\n");
+			va_end(arguments);
 			return;
 		}
 	}
@@ -208,9 +209,10 @@ void Debug<T>::print(T& object, DebugLevel level, const char* name, const char* 
 	if (m_debugClass && level <= m_debugClassMaxLevel)
 	{
 		printf("%s %s: ", name, levelText(level));
-		printf(format, args...);
+		vprintf(format, arguments);
 		printf("\n");
 	}
+	va_end(arguments);
 }
 
 template <class T>

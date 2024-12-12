@@ -44,6 +44,8 @@ public:
 		Triangule  //<! Led is visualizing a triangle function.
 	};
 
+	LedDimming() = default;
+	explicit LedDimming(const LedDimming& other) = delete;
 	virtual ~LedDimming() = default;
 
 	/**

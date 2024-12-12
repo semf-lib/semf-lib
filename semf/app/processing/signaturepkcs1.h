@@ -39,6 +39,8 @@ public:
 		Md5
 	};
 
+	SignaturePkcs1() = default;
+	explicit SignaturePkcs1(const SignaturePkcs1& other) = delete;
 	virtual ~SignaturePkcs1() = default;
 
 	/**

@@ -20,7 +20,7 @@ Stm32AnalogOut::Stm32AnalogOut(DAC_HandleTypeDef& hwHandle, uint32_t channel, Al
 	queue()->push(*this);
 }
 
-void Stm32AnalogOut::start() const
+void Stm32AnalogOut::start()
 {
 	SEMF_INFO("start");
 	HAL_StatusTypeDef state = HAL_DAC_Start(&m_hwHandle, m_channel);
@@ -45,7 +45,7 @@ void Stm32AnalogOut::start() const
 	}
 }
 
-void Stm32AnalogOut::stop() const
+void Stm32AnalogOut::stop()
 {
 	SEMF_INFO("stop");
 	HAL_StatusTypeDef state = HAL_DAC_Stop(&m_hwHandle, m_channel);

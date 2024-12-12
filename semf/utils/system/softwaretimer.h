@@ -41,6 +41,7 @@ public:
 	 * @param start \li true: SoftwareTimer start running. \li false: Time is not running.
 	 */
 	explicit SoftwareTimer(app::TimeBase& timeBase, uint32_t interval = 0, bool start = false);
+	explicit SoftwareTimer(const SoftwareTimer& other) = delete;
 	virtual ~SoftwareTimer() = default;
 
 	/**

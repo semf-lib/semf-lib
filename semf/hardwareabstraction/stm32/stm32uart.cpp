@@ -24,34 +24,18 @@ namespace semf
 {
 LinkedQueue<Stm32Uart> Stm32Uart::m_queue;
 Stm32Uart::Stm32Uart(UART_HandleTypeDef& hwHandle)
-: m_hwHandle(&hwHandle)
+: m_hwHandle(&hwHandle),
+  m_direction{Direction::RxTx},
+  m_wireMode{WireMode::Duplex}
 {
 	queue()->push(*this);
+	setDirection(m_direction);
 }
 
 void Stm32Uart::init()
 {
 	SEMF_INFO("init");
-	HAL_StatusTypeDef state = HAL_UART_Init(m_hwHandle);
-	if (state != HAL_OK)
-	{
-		if (state == HAL_ERROR)
-		{
-			SEMF_ERROR("hal error");
-			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Init_HalError)));
-		}
-		else if (state == HAL_BUSY)
-		{
-			SEMF_ERROR("hal busy");
-			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Init_HalBusy)));
-		}
-		else if (state == HAL_TIMEOUT)
-		{
-			SEMF_ERROR("hal timeout");
-			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Init_HalTimeout)));
-		}
-		return;
-	}
+	setWireMode(m_wireMode);
 }
 
 void Stm32Uart::deinit()
@@ -102,6 +86,7 @@ void Stm32Uart::stopWrite()
 		}
 		return;
 	}
+	setBusyWriting(false);
 	writeStopped();
 }
 
@@ -128,13 +113,13 @@ void Stm32Uart::stopRead()
 		}
 		return;
 	}
+	setBusyReading(false);
 	readStopped();
 }
 
-void Stm32Uart::setFormat(uint8_t bits, WireMode wire, Parity par, StopBits stop, FlowControl flow)
+void Stm32Uart::setFormat(uint8_t bits, Parity par, StopBits stop, FlowControl flow)
 {
-	SEMF_INFO("set format, bits %u, wire %u, parity %u, stop %u, flow %u", bits, static_cast<uint32_t>(wire), static_cast<uint32_t>(par),
-			  static_cast<uint32_t>(stop), static_cast<uint32_t>(flow));
+	SEMF_INFO("set format, bits %u, parity %u, stop %u, flow %u", bits, static_cast<uint32_t>(par), static_cast<uint32_t>(stop), static_cast<uint32_t>(flow));
 
 	halLock();
 	if (par == Parity::NoParity)
@@ -178,23 +163,6 @@ void Stm32Uart::setFormat(uint8_t bits, WireMode wire, Parity par, StopBits stop
 				onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::SetFormat_WordLengthInvalid)));
 				break;
 		}
-	}
-
-	switch (wire)
-	{
-		case WireMode::ReadWire:
-			m_hwHandle->Init.Mode = UART_MODE_RX;
-			break;
-		case WireMode::WriteWire:
-			m_hwHandle->Init.Mode = UART_MODE_TX;
-			break;
-		case WireMode::ReadAndWriteWires:
-			m_hwHandle->Init.Mode = UART_MODE_TX_RX;
-			break;
-		default:
-			SEMF_ERROR("wire invalid %u", static_cast<uint32_t>(wire));
-			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::SetFormat_WireInvalid)));
-			return;
 	}
 
 	switch (par)
@@ -256,6 +224,72 @@ void Stm32Uart::setFormat(uint8_t bits, WireMode wire, Parity par, StopBits stop
 			return;
 	}
 	__HAL_UNLOCK(m_hwHandle);
+}
+
+void Stm32Uart::setWireMode(WireMode mode)
+{
+	SEMF_INFO("set WireMode %u", mode);
+	m_wireMode = mode;
+
+	HAL_StatusTypeDef state = HAL_OK;
+	HAL_UART_DeInit(m_hwHandle);
+
+	switch (m_wireMode)
+	{
+		case WireMode::Duplex:
+			state = HAL_UART_Init(m_hwHandle);
+			break;
+		case WireMode::Simplex:
+			state = HAL_HalfDuplex_Init(m_hwHandle);
+			break;
+		default:
+			SEMF_ERROR("WireMode is invalid %u", static_cast<uint32_t>(m_wireMode));
+			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Init_WireModeInvalid)));
+			return;
+	}
+
+	if (state != HAL_OK)
+	{
+		if (state == HAL_ERROR)
+		{
+			SEMF_ERROR("hal error");
+			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Init_HalError)));
+		}
+		else if (state == HAL_BUSY)
+		{
+			SEMF_ERROR("hal busy");
+			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Init_HalBusy)));
+		}
+		else if (state == HAL_TIMEOUT)
+		{
+			SEMF_ERROR("hal timeout");
+			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::Init_HalTimeout)));
+		}
+		return;
+	}
+}
+
+void Stm32Uart::setDirection(Direction direction)
+{
+	SEMF_INFO("set direction %u", static_cast<uint32_t>(direction));
+
+	m_direction = direction;
+	switch (m_direction)
+	{
+		case Direction::RxOnly:
+			m_hwHandle->Init.Mode = UART_MODE_RX;
+			break;
+		case Direction::TxOnly:
+			m_hwHandle->Init.Mode = UART_MODE_TX;
+			break;
+		case Direction::RxTx:
+			m_hwHandle->Init.Mode = UART_MODE_TX_RX;
+			break;
+		default:
+			SEMF_ERROR("direction is invalid %u", static_cast<uint32_t>(m_direction));
+			onError(Error(kSemfClassId, static_cast<uint8_t>(ErrorCode::SetFormat_DirectionInvalid)));
+			return;
+	}
 }
 
 void Stm32Uart::setBaud(uint32_t baud)

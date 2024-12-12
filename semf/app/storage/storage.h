@@ -24,6 +24,8 @@ namespace app
 class Storage
 {
 public:
+	Storage() = default;
+	explicit Storage(const Storage& other) = delete;
 	virtual ~Storage() = default;
 
 	/**

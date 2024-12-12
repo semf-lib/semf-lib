@@ -15,6 +15,15 @@ extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	semf::Stm32ExternalInterrupt::systemIsr(GPIO_Pin);
 }
+extern "C" void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+{
+	semf::Stm32ExternalInterrupt::systemIsr(GPIO_Pin);
+}
+extern "C" void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+{
+	semf::Stm32ExternalInterrupt::systemIsr(GPIO_Pin);
+}
+
 namespace semf
 {
 Stm32ExternalInterrupt::Stm32ExternalInterrupt(uint32_t externalInterruptPort, uint32_t externalInterruptPinLine)

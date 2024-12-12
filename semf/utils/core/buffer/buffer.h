@@ -48,6 +48,7 @@ public:
 	 * @param bufferSize The size of the data array.
 	 */
 	Buffer(T buffer[], size_t bufferSize);
+	explicit Buffer(const Buffer& other) = delete;
 	virtual ~Buffer() = default;
 
 	/**

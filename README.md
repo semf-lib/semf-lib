@@ -15,13 +15,22 @@ With the semf middleware library lot of helpful modules and interfaces stand rea
 * Fewer complaints and therefore happier customers
 * Happier, more productive developers who enjoy coding more
 
-To start using semf, see the [Documentation](https://software.querdenkerengineering.de/semf-doc).
+To start using semf, see the [Documentation](http://software.querdenkerengineering.de/semf-doc).
 
 ## Licensing
 semf is available for commercial and non commercial usage under the following licenses:
 
 1. For commercial usage: querdenker engineering end user license agreement for semf library
 2. For non commercial usage: “Commons Clause” License Condition v1.0 [i.e. Apache 2.0]
+
+## Examples
+In the examples folder, you will find getting started guides and small sample projects that demonstrate how the **semf** modules work.
+
+To compile the examples execute the following commands:
+```sh
+cmake -B build -DCOMPILE_EXAMPLES=ON .
+cmake --build build
+```
 
 ## semf Components and Structure
 The following structure reflects the folder structure of **semf** library. The highlights are directly linked to the class or interface documentation.

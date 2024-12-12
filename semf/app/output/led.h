@@ -22,6 +22,8 @@ namespace app
 class Led
 {
 public:
+	Led() = default;
+	explicit Led(const Led& other) = delete;
 	virtual ~Led() = default;
 
 	/**Switch the LED on.*/

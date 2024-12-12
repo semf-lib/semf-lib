@@ -20,6 +20,8 @@ namespace app
 class Power
 {
 public:
+	Power() = default;
+	explicit Power(const Power& other) = delete;
 	virtual ~Power() = default;
 
 	/**Executes a software reset on the microcontroller.*/

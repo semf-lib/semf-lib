@@ -48,6 +48,7 @@ public:
 	 * @param chipSelectPin Chip select pin for choosing the target device.
 	 */
 	explicit SpiMasterHardware(Gpio& chipSelectPin);
+	explicit SpiMasterHardware(const SpiMasterHardware& other) = delete;
 	virtual ~SpiMasterHardware() = default;
 
 	/**

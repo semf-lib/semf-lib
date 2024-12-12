@@ -41,6 +41,8 @@ public:
 		ReadOnlyWires     //!< CLK and MISO pins used (no master write)
 	};
 
+	Spi() = default;
+	explicit Spi(const Spi& other) = delete;
 	virtual ~Spi() = default;
 
 	/**

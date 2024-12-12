@@ -24,15 +24,17 @@ namespace semf
 class AnalogOutDma
 {
 public:
+	AnalogOutDma() = default;
+	explicit AnalogOutDma(const AnalogOutDma& other) = delete;
 	virtual ~AnalogOutDma() = default;
 
 	/**
 	 * @brief Starts the hardware module (DAC) for writing DAC values to the output.
 	 * @attention Call \c setData() before. Otherwise will call \c error signal.
 	 */
-	virtual void start() const = 0;
+	virtual void start() = 0;
 	/**Stops the DAC hardware.*/
-	virtual void stop() const = 0;
+	virtual void stop() = 0;
 	/**
 	 * @brief Sets the pointer to the data memory location and its size for starting DAC later by \c start() function.
 	 * to output them on the \c AnalogOutDma pin.

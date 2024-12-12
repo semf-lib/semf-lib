@@ -11,10 +11,6 @@
 #include <semf/utils/core/debug.h>
 
 #if defined(STM32) && defined(HAL_TIM_MODULE_ENABLED)
-extern "C" void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim)
-{
-	semf::Stm32InputCapture::systemIsr(*htim);
-}
 namespace semf
 {
 LinkedQueue<Stm32InputCapture> Stm32InputCapture::m_queue;

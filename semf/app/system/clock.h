@@ -30,6 +30,8 @@ namespace app
 class Clock
 {
 public:
+	Clock() = default;
+	explicit Clock(const Clock& other) = delete;
 	virtual ~Clock() = default;
 
 	/**

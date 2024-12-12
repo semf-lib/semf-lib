@@ -24,6 +24,8 @@ namespace semf
 class I2c
 {
 public:
+	I2c() = default;
+	explicit I2c(const I2c& other) = delete;
 	virtual ~I2c() = default;
 
 	/**

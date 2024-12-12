@@ -62,11 +62,19 @@ void DigitalOut::reset()
 void DigitalOut::toggle()
 {
 	SEMF_INFO("toggle");
-	set(static_cast<State>(!m_gpio.state()));
+
+	if (m_gpio.state())
+	{
+		m_gpio.reset();
+	}
+	else
+	{
+		m_gpio.set();
+	}
 }
 
 app::DigitalOut::State DigitalOut::state() const
 {
-	return static_cast<State>(m_gpio.state());
+	return static_cast<State>(m_inverted ? !m_gpio.state() : m_gpio.state());
 }
 } /* namespace semf */

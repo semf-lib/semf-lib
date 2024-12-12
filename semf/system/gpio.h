@@ -38,6 +38,8 @@ public:
 		Pulldown               //<! Pulldown is enbaled, pullup is disabled.
 	};
 
+	Gpio() = default;
+	explicit Gpio(const Gpio& other) = delete;
 	virtual ~Gpio() = default;
 
 	/**Sets the output to a high level.*/

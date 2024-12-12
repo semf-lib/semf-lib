@@ -23,6 +23,8 @@ namespace app
 class Flash : public Storage
 {
 public:
+	Flash() = default;
+	explicit Flash(const Flash& other) = delete;
 	virtual ~Flash() = default;
 
 	/**

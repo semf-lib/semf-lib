@@ -62,7 +62,7 @@ public:
 	explicit Stm32Rtc(const Stm32Rtc& other) = delete;
 	virtual ~Stm32Rtc() = default;
 
-	uint16_t millisecond() override;
+	uint16_t millisecond() const override;
 	/**
 	 * @copydoc Rtc::setMillisecond()
 	 * @throws SetMillisecond_HalError If the ST-HAL returns a hal error.

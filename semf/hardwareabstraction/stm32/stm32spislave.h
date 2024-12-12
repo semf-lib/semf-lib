@@ -55,8 +55,9 @@ public:
 	/**
 	 * @brief Constructor.
 	 * @param hwHandle Native hardware handle.
+	 * @param useDma If true - semf will use DMA HAL functions for read and write.
 	 */
-	explicit Stm32SpiSlave(SPI_HandleTypeDef& hwHandle);
+	explicit Stm32SpiSlave(SPI_HandleTypeDef& hwHandle, bool useDma = false);
 	explicit Stm32SpiSlave(const Stm32SpiSlave& other) = delete;
 	virtual ~Stm32SpiSlave() = default;
 
@@ -159,6 +160,8 @@ private:
 	size_t m_writeDataSize;
 	/**buffer for reading data*/
 	uint8_t* m_readBuffer;
+	/**Use DMA HAL functions.*/
+	bool m_useDma;
 	/**Class ID for error tracing.*/
 	static constexpr Error::ClassID kSemfClassId = Error::ClassID::Stm32SpiSlave;
 };

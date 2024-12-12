@@ -25,6 +25,8 @@ namespace semf
 class AnalogInDma
 {
 public:
+	AnalogInDma() = default;
+	explicit AnalogInDma(const AnalogInDma& other) = delete;
 	virtual ~AnalogInDma() = default;
 
 	/**

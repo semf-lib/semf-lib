@@ -35,6 +35,8 @@ public:
 		SetAddress_IsBusy
 	};
 
+	I2cMasterHardware() = default;
+	explicit I2cMasterHardware(const I2cMasterHardware& other) = delete;
 	virtual ~I2cMasterHardware() = default;
 
 	/**

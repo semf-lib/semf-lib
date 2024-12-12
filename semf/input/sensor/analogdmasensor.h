@@ -42,6 +42,7 @@ public:
 	virtual ~AnalogDmaSensor() = default;
 
 	void update() override;
+	void update(size_t channel) override;
 	LastInBuffer<T>& buffer(size_t index) override;
 
 private:
@@ -74,10 +75,18 @@ AnalogDmaSensor<T, N_CHANNELS>::AnalogDmaSensor(AnalogInDma& analogInDma, T buff
 		m_buffers[i].setStride(N_CHANNELS);
 	}
 }
+
 template <typename T, size_t N_CHANNELS>
 void AnalogDmaSensor<T, N_CHANNELS>::update()
 {
 	m_analogInDma.start(reinterpret_cast<uint8_t*>(m_data), m_dataSize * sizeof(T));
+}
+
+template <typename T, size_t N_CHANNELS>
+void AnalogDmaSensor<T, N_CHANNELS>::update(size_t channel)
+{
+	(void)channel;
+	SEMF_INFO("Not implemented.");
 }
 
 template <typename T, size_t N_CHANNELS>

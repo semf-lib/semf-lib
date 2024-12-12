@@ -42,6 +42,7 @@ public:
 	virtual ~AnalogSensor() = default;
 
 	void update() override;
+	void update(size_t channel) override;
 	LastInBuffer<T>& buffer(size_t index) override;
 
 private:
@@ -75,6 +76,13 @@ template <typename T, size_t N_CHANNELS>
 void AnalogSensor<T, N_CHANNELS>::update()
 {
 	m_analogIn.start();
+}
+
+template <typename T, size_t N_CHANNELS>
+void AnalogSensor<T, N_CHANNELS>::update(size_t channel)
+{
+	(void)channel;
+	SEMF_INFO("Not implemented.");
 }
 
 template <typename T, size_t N_CHANNELS>

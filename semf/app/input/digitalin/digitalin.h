@@ -41,6 +41,8 @@ public:
 		High = true  /**< Pin is at high state*/
 	};
 
+	DigitalIn() = default;
+	explicit DigitalIn(const DigitalIn& other) = delete;
 	virtual ~DigitalIn() = default;
 
 	/**

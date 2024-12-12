@@ -18,7 +18,7 @@ Stm32Rtc::Stm32Rtc(RTC_HandleTypeDef& hrtc)
 {
 }
 
-uint16_t Stm32Rtc::millisecond()
+uint16_t Stm32Rtc::millisecond() const
 {
 #if defined(STM32F1)
 	return 0;

@@ -62,6 +62,7 @@ public:
 		{
 			return m_next;
 		}
+
 		/**
 		 * @brief Sets a pointer to the next element in a list.
 		 * @attention Do not use outside LinkedList. That leads to undefined behavior.
@@ -71,6 +72,7 @@ public:
 		{
 			m_next = next;
 		}
+
 		/**
 		 * @brief Returns a pointer to the previous element in a list.
 		 * @attention The first element in a list will return \c nullptr.
@@ -80,6 +82,7 @@ public:
 		{
 			return m_previous;
 		}
+
 		/**
 		 * @brief Sets a pointer to the previous element in a list.
 		 * @attention Do not use outside LinkedList. That leads to undefined behavior.
@@ -89,6 +92,7 @@ public:
 		{
 			m_previous = previous;
 		}
+
 		/**
 		 * @brief Returns if a node is part of a \c LinkedList.
 		 * @note This is done by checking if the pointer to the previous and next element is \c nullptr.
@@ -122,14 +126,16 @@ public:
 		using refernce = T&;
 
 		Iterator() = default;
+
 		/**
 		 * @brief Constructor with member variable initialization.
 		 * @param element Pointer to the element starting iterating.
 		 */
 		explicit Iterator(T* element)
-		: m_node(element)
+			: m_node(element)
 		{
 		}
+
 		virtual ~Iterator() = default;
 
 		/**
@@ -142,6 +148,7 @@ public:
 		{
 			return *m_node;
 		}
+
 		/**
 		 * @brief Returns the pointer into the element the iterator's position.
 		 * @attention Using the reference for an iterator being nullptr
@@ -152,6 +159,7 @@ public:
 		{
 			return m_node;
 		}
+
 		/**
 		 * @brief Iterates to the next element in the list.
 		 * @attention Using the reference for an iterator being nullptr
@@ -163,6 +171,7 @@ public:
 			m_node = m_node->LinkedList::Node::next();
 			return *this;
 		}
+
 		/**
 		 * @brief Iterates to the next element in the list.
 		 * @attention Using the reference for an iterator being nullptr
@@ -175,6 +184,7 @@ public:
 			m_node = m_node->LinkedList::Node::next();
 			return temp;
 		}
+
 		/**
 		 * @brief Iterates to the previous element in the list.
 		 * @attention Using the reference for an iterator being nullptr
@@ -186,6 +196,7 @@ public:
 			m_node = m_node->LinkedList::Node::previous();
 			return *this;
 		}
+
 		/**
 		 * @brief Iterates to the previous element in the list.
 		 * @attention Using the reference for an iterator being nullptr
@@ -198,6 +209,7 @@ public:
 			temp.m_node = temp.m_node->LinkedList::Node::previous();
 			return temp;
 		}
+
 		/**
 		 * @brief Compares \c this element with \c that element.
 		 * @param that Iterator to compare.
@@ -208,6 +220,7 @@ public:
 		{
 			return m_node == that.m_node;
 		}
+
 		/**
 		 * @brief Compares \c this element with \c that element.
 		 * @param that Iterator to compare.
@@ -237,22 +250,25 @@ public:
 		using refernce = T&;
 
 		ConstIterator() = default;
+
 		/**
 		 * @brief Constructor with member variable initialization.
 		 * @param element Pointer to the element starting iterating.
 		 */
 		explicit ConstIterator(const T* element)
-		: m_node(element)
+			: m_node(element)
 		{
 		}
+
 		/**
 		 * @brief Copy constructor.
 		 * @param iterator iterator to copy from.
 		 */
 		explicit ConstIterator(const Iterator& iterator)
-		: m_node(iterator.m_node)
+			: m_node(iterator.m_node)
 		{
 		}
+
 		virtual ~ConstIterator() = default;
 
 		/**
@@ -265,6 +281,7 @@ public:
 		{
 			return *m_node;
 		}
+
 		/**
 		 * @brief Returns the pointer into the element the iterator's position.
 		 * @attention Using the reference for an iterator being nullptr
@@ -275,6 +292,7 @@ public:
 		{
 			return m_node;
 		}
+
 		/**
 		 * @brief Iterates to the next element in the list.
 		 * @attention Using the reference for an iterator being nullptr
@@ -286,6 +304,7 @@ public:
 			m_node = m_node->LinkedList::Node::next();
 			return *this;
 		}
+
 		/**
 		 * @brief Iterates to the next element in the list.
 		 * @attention Using the reference for an iterator being nullptr
@@ -298,6 +317,7 @@ public:
 			m_node = m_node->LinkedList::Node::next();
 			return temp;
 		}
+
 		/**
 		 * @brief Iterates to the previous element in the list.
 		 * @attention Using the reference for an iterator being nullptr
@@ -309,6 +329,7 @@ public:
 			m_node = m_node->LinkedList::Node::previous();
 			return *this;
 		}
+
 		/**
 		 * @brief Iterates to the previous element in the list.
 		 * @attention Using the reference for an iterator being nullptr
@@ -321,6 +342,7 @@ public:
 			m_node = m_node->LinkedList::Node::previous();
 			return temp;
 		}
+
 		/**
 		 * @brief Compares \c this element with \c that element.
 		 * @param other Iterator to compare.
@@ -331,6 +353,7 @@ public:
 		{
 			return m_node == other.m_node;
 		}
+
 		/**
 		 * @brief Compares \c this element with \c that element.
 		 * @param other Iterator to compare.
@@ -346,6 +369,7 @@ public:
 		/**Pointer to the node organizing*/
 		const T* m_node = nullptr;
 	};
+
 	/**
 	 * @brief Creates an empty List
 	 */
@@ -530,6 +554,11 @@ private:
 	 * @param element Element to push.
 	 */
 	void pushEmpty(T& element);
+	/**
+	 * @brief Invalidates removed elements.
+	 * @param node Removed node.
+	 */
+	void invalidateElement(Node& node);
 	/**Pointer to the fist element in the list*/
 	T* m_front = nullptr;
 	/**Element behind the last element in the list*/
@@ -619,9 +648,7 @@ size_t LinkedList<T>::size() const
 template <class T>
 void LinkedList<T>::clear()
 {
-	m_front = nullptr;
-	m_end.setPrevious(m_front);
-	m_size = 0;
+	erase(begin(), end());
 }
 
 template <class T>
@@ -670,8 +697,12 @@ typename LinkedList<T>::Iterator LinkedList<T>::erase(Iterator position)
 		pre->LinkedList::Node::setNext(nex);
 		nex->LinkedList::Node::setPrevious(pre);
 		m_size--;
-		return ++position;
+		semf::LinkedList<T>::Node& oldPosition = *position;
+		position++;
+		invalidateElement(oldPosition);
+		return position;
 	}
+
 	return Iterator();
 }
 
@@ -724,9 +755,15 @@ void LinkedList<T>::pushFront(T& element)
 template <class T>
 void LinkedList<T>::popBack()
 {
+	if (m_size == 0)
+		return;
+
+	LinkedList<T>::Node& oldBack = *m_end.previous();
 	if (m_size == 1)
 	{
-		clear();
+		m_front = nullptr;
+		m_end.setPrevious(m_front);
+		m_size = 0;
 	}
 	else if (m_size > 1)
 	{
@@ -735,20 +772,28 @@ void LinkedList<T>::popBack()
 		newPrev->LinkedList::Node::setNext(reinterpret_cast<T*>(&m_end));
 		m_size--;
 	}
+	invalidateElement(oldBack);
 }
 
 template <class T>
 void LinkedList<T>::popFront()
 {
+	if (m_size == 0)
+		return;
+
+	LinkedList<T>::Node& oldFront = *m_front;
 	if (m_size == 1)
 	{
-		clear();
+		m_front = nullptr;
+		m_end.setPrevious(m_front);
+		m_size = 0;
 	}
 	else
 	{
 		m_front = m_front->LinkedList::Node::next();
 		m_size--;
 	}
+	invalidateElement(oldFront);
 }
 
 template <class T>
@@ -759,13 +804,21 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& list)
 	this->m_size = list.m_size;
 	return *this;
 }
+
 template <class T>
-void semf::LinkedList<T>::pushEmpty(T& element)
+void LinkedList<T>::pushEmpty(T& element)
 {
 	element.LinkedList::Node::setPrevious(nullptr);
 	element.LinkedList::Node::setNext(reinterpret_cast<T*>(&m_end));
 	m_end.setPrevious(&element);
 	m_front = &element;
+}
+
+template <class T>
+void LinkedList<T>::invalidateElement(Node& node)
+{
+	node.setNext(nullptr);
+	node.setPrevious(nullptr);
 }
 } /* namespace semf */
 #endif /* SEMF_UTILS_CORE_LISTS_LINKEDLIST_H_ */

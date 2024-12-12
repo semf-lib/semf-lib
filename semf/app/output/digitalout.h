@@ -30,6 +30,8 @@ public:
 		High = true  /**< Pin is set to a high state*/
 	};
 
+	DigitalOut() = default;
+	explicit DigitalOut(const DigitalOut& other) = delete;
 	virtual ~DigitalOut() = default;
 
 	/**

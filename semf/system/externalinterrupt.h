@@ -30,6 +30,8 @@ public:
 		RisingAndFallingEdge  //<! EXTI is triggered by rising and falling edges.
 	};
 
+	ExternalInterrupt() = default;
+	explicit ExternalInterrupt(const ExternalInterrupt& other) = delete;
 	virtual ~ExternalInterrupt() = default;
 
 	/**

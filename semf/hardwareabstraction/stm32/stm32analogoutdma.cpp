@@ -20,7 +20,7 @@ Stm32AnalogOutDma::Stm32AnalogOutDma(DAC_HandleTypeDef& hwHandle, uint32_t chann
 	queue()->push(*this);
 }
 
-void Stm32AnalogOutDma::start() const
+void Stm32AnalogOutDma::start()
 {
 	SEMF_INFO("start");
 	if (m_data == nullptr || m_size == 0)
@@ -52,7 +52,7 @@ void Stm32AnalogOutDma::start() const
 	}
 }
 
-void Stm32AnalogOutDma::stop() const
+void Stm32AnalogOutDma::stop()
 {
 	SEMF_INFO("stop");
 	HAL_StatusTypeDef state = HAL_DAC_Stop_DMA(&m_hwHandle, m_channel);

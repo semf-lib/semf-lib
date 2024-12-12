@@ -24,6 +24,8 @@ namespace app
 class ErrorCorrectionCode
 {
 public:
+	ErrorCorrectionCode() = default;
+	explicit ErrorCorrectionCode(const ErrorCorrectionCode& other) = delete;
 	virtual ~ErrorCorrectionCode() = default;
 
 	/**

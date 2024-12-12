@@ -24,6 +24,8 @@ namespace semf
 class Can
 {
 public:
+	Can() = default;
+	explicit Can(const Can& other) = delete;
 	virtual ~Can() = default;
 
 	/**Sends a CAN request. Message id has to be set first by calling \c setMessageId().*/

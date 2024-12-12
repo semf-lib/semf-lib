@@ -40,6 +40,8 @@ template <typename T_CONVERTED>
 class Sensor
 {
 public:
+	Sensor() = default;
+	explicit Sensor(const Sensor& other) = delete;
 	virtual ~Sensor() = default;
 
 	/**

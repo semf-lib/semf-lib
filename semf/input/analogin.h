@@ -26,6 +26,8 @@ namespace semf
 class AnalogIn
 {
 public:
+	AnalogIn() = default;
+	explicit AnalogIn(const AnalogIn& other) = delete;
 	virtual ~AnalogIn() = default;
 
 	/**

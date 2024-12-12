@@ -15,8 +15,9 @@ namespace semf
 {
 LinkedQueue<Stm32SpiSlave> Stm32SpiSlave::m_queue;
 
-Stm32SpiSlave::Stm32SpiSlave(SPI_HandleTypeDef& hwHandle)
-: m_hwHandle{&hwHandle}
+Stm32SpiSlave::Stm32SpiSlave(SPI_HandleTypeDef& hwHandle, bool useDma)
+: m_hwHandle{&hwHandle},
+  m_useDma{useDma}
 {
 	m_queue.push(*this);
 	aborted.connect(m_abortedSlot);
@@ -119,7 +120,16 @@ void Stm32SpiSlave::systemIsrAbort(SPI_HandleTypeDef& hwHandle)
 void Stm32SpiSlave::writeHardware(const uint8_t data[], size_t dataSize)
 {
 	__HAL_UNLOCK(m_hwHandle);
-	auto state = HAL_SPI_Transmit_IT(m_hwHandle, const_cast<uint8_t*>(data), static_cast<uint16_t>(dataSize));
+	HAL_StatusTypeDef state = HAL_OK;
+	if (m_useDma)
+	{
+		state = HAL_SPI_Transmit_DMA(m_hwHandle, const_cast<uint8_t*>(data), static_cast<uint16_t>(dataSize));
+	}
+	else
+	{
+		state = HAL_SPI_Transmit_IT(m_hwHandle, const_cast<uint8_t*>(data), static_cast<uint16_t>(dataSize));
+	}
+
 	if (state != HAL_OK)
 	{
 		if (state == HAL_ERROR)
@@ -144,7 +154,16 @@ void Stm32SpiSlave::writeHardware(const uint8_t data[], size_t dataSize)
 void Stm32SpiSlave::readHardware(uint8_t buffer[], size_t bufferSize)
 {
 	__HAL_UNLOCK(m_hwHandle);
-	auto state = HAL_SPI_Receive_IT(m_hwHandle, buffer, static_cast<uint16_t>(bufferSize));
+	HAL_StatusTypeDef state = HAL_OK;
+	if (m_useDma)
+	{
+		state = HAL_SPI_Receive_DMA(m_hwHandle, const_cast<uint8_t*>(buffer), static_cast<uint16_t>(bufferSize));
+	}
+	else
+	{
+		state = HAL_SPI_Receive_IT(m_hwHandle, const_cast<uint8_t*>(buffer), static_cast<uint16_t>(bufferSize));
+	}
+
 	if (state != HAL_OK)
 	{
 		if (state == HAL_ERROR)
@@ -173,7 +192,16 @@ void Stm32SpiSlave::writeReadHardware(const uint8_t writeData[], uint8_t readBuf
 	m_writeDataSize = size;
 
 	__HAL_UNLOCK(m_hwHandle);
-	auto state = HAL_SPI_TransmitReceive_IT(m_hwHandle, const_cast<uint8_t*>(writeData), readBuffer, 1);
+	HAL_StatusTypeDef state = HAL_OK;
+	if (m_useDma)
+	{
+		state = HAL_SPI_TransmitReceive_DMA(m_hwHandle, const_cast<uint8_t*>(writeData), readBuffer, static_cast<uint16_t>(size));
+	}
+	else
+	{
+		state = HAL_SPI_TransmitReceive_IT(m_hwHandle, const_cast<uint8_t*>(writeData), readBuffer, static_cast<uint16_t>(size));
+	}
+
 	if (state != HAL_OK)
 	{
 		if (state == HAL_ERROR)

@@ -58,15 +58,17 @@ public:
 	 * @brief Constructor.
 	 * @param hwHandle Hardware spi handle.
 	 * @param spiClockFrequencyHz Frequency of the clock running the SPI module in Hz.
+	 * @param useDma If true - semf will use DMA HAL functions for read and write.
 	 */
-	explicit Stm32SpiMaster(SPI_HandleTypeDef& hwHandle, uint32_t spiClockFrequencyHz = 0);
+	explicit Stm32SpiMaster(SPI_HandleTypeDef& hwHandle, uint32_t spiClockFrequencyHz = 0, bool useDma = false);
 	/**
 	 * @brief Constructor
 	 * @param hwHandle SPI hardware interface.
 	 * @param chipSelectPin	Gpio for chip select.
 	 * @param spiClockFrequencyHz Frequency of the clock running the SPI module in Hz.
+	 * @param useDma If true - semf will use DMA HAL functions for read and write.
 	 */
-	Stm32SpiMaster(SPI_HandleTypeDef& hwHandle, Gpio& chipSelectPin, uint32_t spiClockFrequencyHz = 0);
+	Stm32SpiMaster(SPI_HandleTypeDef& hwHandle, Gpio& chipSelectPin, uint32_t spiClockFrequencyHz = 0, bool useDma = false);
 	explicit Stm32SpiMaster(const Stm32SpiMaster& other) = delete;
 	virtual ~Stm32SpiMaster() = default;
 
@@ -193,6 +195,8 @@ private:
 	SPI_HandleTypeDef* m_hwHandle;
 	/**Frequency of the clock running the SPI module in Hz.*/
 	const uint32_t m_spiClockFrequencyHz;
+	/**Use DMA HAL functions.*/
+	bool m_useDma;
 	/**Buffering write data.*/
 	const uint8_t* m_writeData = nullptr;
 	/**Buffering read data.*/

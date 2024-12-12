@@ -39,6 +39,8 @@ public:
 		StopListening_IsBusy
 	};
 
+	I2cSlaveHardware() = default;
+	explicit I2cSlaveHardware(const I2cSlaveHardware& other) = delete;
 	virtual ~I2cSlaveHardware() = default;
 
 	/**

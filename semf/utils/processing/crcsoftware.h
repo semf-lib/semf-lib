@@ -36,9 +36,10 @@ public:
 	 * @param finalXor Uses this final xor value instead of the default final xor value.
 	 */
 	explicit CrcSoftware(T polynomial = DEFAULT_POLYNOMIAL, T initValue = DEFAULT_INITVALUE, T finalXor = DEFAULT_FINALXOR);
+	explicit CrcSoftware(const CrcSoftware& other) = delete;
 	virtual ~CrcSoftware() = default;
 
-	void reset();
+	void reset() override;
 	const uint8_t* accumulate(const uint8_t data[], size_t dataSize) override;
 	const uint8_t* calculate(const uint8_t data[], size_t dataSize) override;
 	bool isEqual(const uint8_t data[]) override;

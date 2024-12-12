@@ -24,6 +24,8 @@ namespace app
 class PwmOut
 {
 public:
+	PwmOut() = default;
+	explicit PwmOut(const PwmOut& other) = delete;
 	virtual ~PwmOut() = default;
 
 	/**

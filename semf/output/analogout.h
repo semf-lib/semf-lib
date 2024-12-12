@@ -22,6 +22,8 @@ namespace semf
 class AnalogOut
 {
 public:
+	AnalogOut() = default;
+	explicit AnalogOut(const AnalogOut& other) = delete;
 	//! @cond Doxygen_Suppress
 	virtual ~AnalogOut() = default;
 	//! @endcond
@@ -30,9 +32,9 @@ public:
 	 * @brief Starts the hardware module (DAC) for writing DAC values to the output.
 	 * Call \c setValue before.
 	 */
-	virtual void start() const = 0;
+	virtual void start() = 0;
 	/**Stops the DAC hardware.*/
-	virtual void stop() const = 0;
+	virtual void stop() = 0;
 	/**
 	 * @brief Writes \c value into hardware register. Call \c start to output the value.
 	 * @param value Digital to analog value.

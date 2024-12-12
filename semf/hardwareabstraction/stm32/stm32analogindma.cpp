@@ -24,7 +24,7 @@ void Stm32AnalogInDma::start(uint8_t buffer[], size_t bufferSize)
 {
 	SEMF_INFO("start data: %p, size: %u", buffer, bufferSize);
 
-#if !defined(STM32F4) && !defined STM32F7
+#if !defined(STM32F4) && !defined STM32F7 && !defined STM32U5
 	if (m_hwHandle->DMA_Handle && m_hwHandle->DMA_Handle->Init.MemDataAlignment)
 		bufferSize /= (m_hwHandle->DMA_Handle->Init.MemDataAlignment >> (DMA_CCR_MSIZE_Pos - 1));
 #endif

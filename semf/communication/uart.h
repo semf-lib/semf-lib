@@ -25,42 +25,49 @@ class Uart
 {
 public:
 	/**Flow control modes for using RTS / CTS.*/
-	enum class FlowControl: uint8_t
+	enum class FlowControl : uint8_t
 	{
-		NoFlowControl = 0x00,  //!< No flow control setting, only RXD and TXD pins are used.
-		RtsFlowControl = 0x01,  //!< Receive flow control setting, RXD, TXD and RTS pins are used.
-		CtsFlowControl = 0x10,  //!< Transmit flow control setting, RXD, TXD and CTS pins are used.
+		NoFlowControl = 0x00,        //!< No flow control setting, only RXD and TXD pins are used.
+		RtsFlowControl = 0x01,       //!< Receive flow control setting, RXD, TXD and RTS pins are used.
+		CtsFlowControl = 0x10,       //!< Transmit flow control setting, RXD, TXD and CTS pins are used.
 		RtsAndCtsFlowControl = 0x11  //!< Full flow control setting, RXD, TXD, CTS and RTS pins are used.
 	};
 	/**Parity setting.*/
-	enum class Parity: uint8_t
+	enum class Parity : uint8_t
 	{
 		NoParity,
 		OddParity,
 		EvenParity
 	};
 	/**Number of stop bits.*/
-	enum class StopBits: uint8_t
+	enum class StopBits : uint8_t
 	{
 		Stopbits_0_5,
 		Stopbits_1,
 		Stopbits_1_5,
 		Stopbits_2,
 	};
-	/**Wire mode for full- or half duplex mode.*/
-	enum class WireMode: uint8_t
+	/**Wire mode for Single- or Double wire mode.*/
+	enum class WireMode : uint8_t
 	{
-		ReadWire,
-		WriteWire,
-		ReadAndWriteWires
+		Simplex,
+		Duplex
+	};
+	/**Direction mode for Receive, transmit or both.*/
+	enum class Direction : uint8_t
+	{
+		RxTx,
+		RxOnly,
+		TxOnly
 	};
 
+	Uart() = default;
+	explicit Uart(const Uart& other) = delete;
 	virtual ~Uart() = default;
 
 	/**
 	 * @brief Sets the format for the spi slave device.
 	 * @param bits Number of data bits (without parity) per frame.
-	 * @param wire Full duplex mode or half duplex mode.
 	 * @param par Parity.
 	 * @param stop Stop bits.
 	 * @param flow Flow control.
@@ -68,7 +75,17 @@ public:
 	 * i.e.: in case of sending a frame 8 bits without parity, number of data bits should be 8 bits.
 	 * i.e.: in case of sending a frame of 8 bits including a parity, number of bits should be 7 bits.
 	 */
-	virtual void setFormat(uint8_t bits, WireMode wire, Parity par, StopBits stop, FlowControl flow) = 0;
+	virtual void setFormat(uint8_t bits, Parity par, StopBits stop, FlowControl flow) = 0;
+	/**
+	 * @brief Sets the wire mode
+	 * @param mode The new wire mode.
+	 */
+	virtual void setWireMode(WireMode mode) = 0;
+	/**
+	 * @brief Sets the data direction support
+	 * @param direction The new communication direction.
+	 */
+	virtual void setDirection(Direction direction) = 0;
 	/**
 	 * @brief Sets the baud rate.
 	 * @param baud Baud rate.
@@ -76,9 +93,9 @@ public:
 	virtual void setBaud(uint32_t baud) = 0;
 	/**
 	 * @brief Returns the currently used baud rate.
-	 * @return Baud rate. 
+	 * @return Baud rate.
 	 */
 	virtual uint32_t baud() = 0;
 };
-}  /* namespace semf */
+} /* namespace semf */
 #endif  // SEMF_COMMUNICATION_UART_H_

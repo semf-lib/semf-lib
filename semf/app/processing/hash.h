@@ -23,6 +23,8 @@ namespace app
 class Hash
 {
 public:
+	Hash() = default;
+	explicit Hash(const Hash& other) = delete;
 	virtual ~Hash() = default;
 
 	/**Starts hash computation.**/

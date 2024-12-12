@@ -23,6 +23,8 @@ namespace app
 class Crc
 {
 public:
+	Crc() = default;
+	explicit Crc(const Crc& other) = delete;
 	virtual ~Crc() = default;
 
 	/**

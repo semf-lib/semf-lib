@@ -34,6 +34,7 @@ public:
 	 */
 	PidController(double kp, double ki, double kd, double sampleTime, double yMin, double yMax, double setpoint = 0, double yStart = 0,
 				  double deltaMax = DBL_MAX);
+	explicit PidController(const PidController& other) = delete;
 	virtual ~PidController() = default;
 
 	/**

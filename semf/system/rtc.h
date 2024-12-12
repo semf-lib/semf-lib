@@ -22,13 +22,15 @@ namespace semf
 class Rtc
 {
 public:
+	Rtc() = default;
+	explicit Rtc(const Rtc& other) = delete;
 	virtual ~Rtc() = default;
 
 	/**
 	 * @brief Get the milliseconds from the current time.
 	 * @return The milliseconds from the current time.
 	 */
-	virtual uint16_t millisecond() = 0;
+	virtual uint16_t millisecond() const = 0;
 	/**
 	 * @brief For set a new time.
 	 * @param millisecond The milliseconds for the new time.

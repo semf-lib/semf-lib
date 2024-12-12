@@ -29,6 +29,7 @@ public:
 		Init_HalError = 0,
 		Init_HalBusy,
 		Init_HalTimeout,
+		Init_WireModeInvalid,
 		Deinit_HalError,
 		Deinit_HalBusy,
 		Deinit_HalTimeout,
@@ -48,7 +49,8 @@ public:
 		WriteHardware_HalTimeout,
 		ReadHardware_HalError,
 		ReadHardware_HalBusy,
-		ReadHardware_HalTimeout
+		ReadHardware_HalTimeout,
+		SetFormat_DirectionInvalid,
 	};
 
 	/**
@@ -92,12 +94,23 @@ public:
 	/**
 	 * @copydoc UartHardware::setFormat()
 	 * @throws SetFormat_WordLengthInvalid If bits is invalid (7, 8 and 9 are possible).
-	 * @throws SetFormat_WireInvalid If wire is invalid.
 	 * @throws SetFormat_ParityInvalid If par is invalid.
 	 * @throws SetFormat_StopBitsInvalid If stop is invalid.
 	 * @throws SetFormat_FlowInvalid If flow is invalid.
 	 */
-	void setFormat(uint8_t bits, WireMode wire, Parity par, StopBits stop, FlowControl flow) override;
+	void setFormat(uint8_t bits, Parity par, StopBits stop, FlowControl flow) override;
+	/**
+	 * @brief Sets new Wire mode and reinitializing UART in new mode
+	 * @throws Deinit_HalError If the ST-HAL returns a hal error.
+	 * @throws Deinit_HalBusy If the ST-HAL returns a hal bussy.
+	 * @throws Deinit_HalTimeout If the ST-HAL returns a hal timeout.
+	 */
+	void setWireMode(WireMode mode) override;
+	/**
+	 * @copydoc UartHardware::setDirection()
+	 * @throws SetFormat_DirectionInvalid If Direction is invalid.
+	 */
+	void setDirection(Direction direction) override;
 	void setBaud(uint32_t baud) override;
 	uint32_t baud() override;
 	/**
@@ -154,6 +167,10 @@ private:
 	static LinkedQueue<Stm32Uart> m_queue;
 	/**Hardware handler*/
 	UART_HandleTypeDef* m_hwHandle;
+
+	Direction m_direction;
+	WireMode m_wireMode;
+
 	/**Class ID for error tracing.*/
 	static constexpr Error::ClassID kSemfClassId = Error::ClassID::Stm32Uart;
 };

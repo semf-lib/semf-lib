@@ -42,6 +42,7 @@ public:
 	 *  @param designCapacity Designed battery capacity of a new battery in Ah.
 	 */
 	explicit BatteryModelWithoutDataset(T_CAPACITY designCapacity);
+	explicit BatteryModelWithoutDataset(const BatteryModelWithoutDataset& other) = delete;
 	virtual ~BatteryModelWithoutDataset() = default;
 
 	/**

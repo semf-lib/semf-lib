@@ -30,10 +30,19 @@ template <typename T_RAW>
 class HardwareSensor
 {
 public:
+	HardwareSensor() = default;
+	explicit HardwareSensor(const HardwareSensor& other) = delete;
 	virtual ~HardwareSensor() = default;
 
-	/**Starts a measurement cycle and will emit \c dataAvailable afterwards.*/
+	/**
+	 * @brief Starts a measurement cycle and will emit \c dataAvailable afterwards. 
+	 * */
 	virtual void update() = 0;
+	/**
+	 * @brief Starts a measurement cycle for specific channel and will emit \c dataAvailable afterwards.
+	 * @param channel Channel index for update. 
+	 * */
+	virtual void update(size_t channel) = 0;
 	/**
 	 * @brief Returns the buffer, where the measurement data is stored in.
 	 * @param index Index of a specific sensor.

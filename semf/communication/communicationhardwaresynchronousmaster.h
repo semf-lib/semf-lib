@@ -21,6 +21,8 @@ namespace semf
 class CommunicationHardwareSynchronousMaster : public CommunicationHardware
 {
 public:
+	CommunicationHardwareSynchronousMaster() = default;
+	explicit CommunicationHardwareSynchronousMaster(const CommunicationHardwareSynchronousMaster& other) = delete;
 	virtual ~CommunicationHardwareSynchronousMaster() = default;
 
 	Type type() const override

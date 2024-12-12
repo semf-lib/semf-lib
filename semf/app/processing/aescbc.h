@@ -33,6 +33,8 @@ public:
 		Error = false, /**< Failed execution of a method.*/
 	};
 
+	AesCbc() = default;
+	explicit AesCbc(const AesCbc& other) = delete;
 	virtual ~AesCbc() = default;
 
 	/**

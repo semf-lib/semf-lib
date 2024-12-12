@@ -34,6 +34,8 @@ public:
 		Read_BufferSizeIsZero
 	};
 
+	UartHardware() = default;
+	explicit UartHardware(const UartHardware& other) = delete;
 	virtual ~UartHardware() = default;
 
 	/**

@@ -38,6 +38,7 @@ public:
 	 * 		 \li \c false If a given data point is beyond the boundaries, then \c m_retValue is \c false.
 	 */
 	explicit LinearInterpolator(bool limitToBoundaryValues = true);
+	explicit LinearInterpolator(const LinearInterpolator& other) = delete;
 	virtual ~LinearInterpolator() = default;
 
 	/**

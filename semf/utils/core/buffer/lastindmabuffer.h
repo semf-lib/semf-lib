@@ -44,13 +44,13 @@ public:
 	 * @brief Write data in the buffer.
 	 * @param data Data to write in the buffer.
 	 */
-	virtual void put(T data);
+	void put(T data) override;
 	/**
 	 * @brief Returns the entry from a specific position in the buffer.
 	 * @param pos Position in the buffer.
 	 * @return The Entry.
 	 */
-	virtual T& operator[](size_t pos) const;
+	T& operator[](size_t pos) const override;
 	/**
 	 * @brief Set the stride between to entries of the same input.
 	 * @note For example: Use a dma sampling three different data, the stride between two entries in this buffer is 3.

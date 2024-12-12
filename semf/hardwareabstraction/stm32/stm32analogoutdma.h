@@ -61,7 +61,7 @@ public:
 	 * @throws Start_HalBusy If the ST-HAL is busy.
 	 * @throws Start_HalTimeout If the ST-HAL times out.
 	 */
-	void start() const override;
+	void start() override;
 	/**
 	 * @copydoc AnalogOut::stop()
 	 * @throws Stop_DataInvalid If the data is invalid (nullptr or size = 0).
@@ -69,7 +69,7 @@ public:
 	 * @throws Stop_HalBusy If the ST-HAL is busy.
 	 * @throws Stop_HalTimeout If the ST-HAL times out.
 	 */
-	void stop() const override;
+	void stop() override;
 	void setData(const uint8_t data[], size_t dataSize) override;
 	/**
 	 * @brief Get the list with all analog outs.

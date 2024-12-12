@@ -35,6 +35,8 @@ namespace app
 class TimeBase
 {
 public:
+	TimeBase() = default;
+	explicit TimeBase(const TimeBase& other) = delete;
 	virtual ~TimeBase() = default;
 
 	/**

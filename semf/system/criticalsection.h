@@ -18,8 +18,8 @@ namespace semf
 class CriticalSection
 {
 public:
-	/**Constructor.*/
 	CriticalSection();
+	explicit CriticalSection(const CriticalSection& other) = delete;
 	virtual ~CriticalSection() = default;
 
 	/**Must call on enter a critical section.*/

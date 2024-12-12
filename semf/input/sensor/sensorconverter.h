@@ -46,7 +46,12 @@ public:
 	 * @param index Index of the specific sensor.
 	 */
 	SensorConverter(HardwareSensor<T_RAW>& hardwareSensor, size_t index);
+	explicit SensorConverter(const SensorConverter& other) = delete;
 	virtual ~SensorConverter() = default;
+
+	T_CONVERTED currentValue() const override;
+	T_CONVERTED averageValue() const override;
+	void update() override;
 
 protected:
 	/**
@@ -62,9 +67,6 @@ private:
 	 * @param index Index of the specific sensor.
 	 */
 	void onDataAvailable(size_t index);
-	void update();
-	T_CONVERTED currentValue() const override;
-	T_CONVERTED averageValue() const override;
 
 	/**Reference to hardware sensor for calling \c update() function.*/
 	HardwareSensor<T_RAW>& m_hardwareSensor;

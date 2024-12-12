@@ -36,6 +36,8 @@ public:
 		Request_IsBusy
 	};
 
+	CanHardware() = default;
+	explicit CanHardware(const CanHardware& other) = delete;
 	virtual ~CanHardware() = default;
 
 	/**

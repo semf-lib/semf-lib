@@ -23,6 +23,8 @@ namespace app
 class Timer
 {
 public:
+	Timer() = default;
+	explicit Timer(const Timer& other) = delete;
 	virtual ~Timer() = default;
 
 	/**Starts the timer.*/

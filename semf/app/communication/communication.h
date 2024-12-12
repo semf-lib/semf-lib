@@ -24,6 +24,8 @@ namespace app
 class Communication
 {
 public:
+	Communication() = default;
+	explicit Communication(const Communication& other) = delete;
 	virtual ~Communication() = default;
 	/**
 	 * @brief For writing data, \c dataWritten signal will be emitted after successful write.

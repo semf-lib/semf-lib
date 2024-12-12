@@ -38,6 +38,8 @@ public:
 		FirstAndLast = 0x11  //!< start AND stop condition
 	};
 
+	CommunicationHardware() = default;
+	explicit CommunicationHardware(const CommunicationHardware& other) = delete;
 	virtual ~CommunicationHardware() = default;
 
 	/**Initializes the hardware.*/

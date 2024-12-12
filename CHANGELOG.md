@@ -1,4 +1,79 @@
 # Changelog
+## v24.12.0
+* Refactored Stm32OneWireMasterUart to a generic OneWireMasterUart
+* Changed link to documentation in readme
+* Bigfix for using crc in FirmwareVerifier
+* Added STM32U5 AnalogOut
+* Added STM32U5 Flash
+* Added STM32U5 GPIO
+* Added STM32U5 AnalogIn, AnalogInDma
+* Added STM32U5 UART
+* Added STM32U5 PWM
+* Added STM32U5 CriticalSection
+* Added STM32U5 SysTick
+* Added STM32U5 ExternalInterrupt
+* fixed release via CI/CD
+
+## v24.10.0
+* Added DMA to Stm32SpiMaster and Stm32SpiSlave
+* Added `Encoder` abstraction
+* Added `Encoder` Stm32 and Stm32G4 implementation
+* Added default and delete constructors, where missing
+* Bugfix GoogleTest is only added on COMPILE_TESTS active
+* Bugfix OneWireMaster depends now on active UART module
+* Add dependency to stm32, add baremetall guard, pull cmake to 3.24
+* Added specific channel update in HardwareSensor
+
+## v24.8.0
+* Implemented `Esp32AnalogIn` using the adc_continuous-API
+* Added reference for `Sensor` and `EepromEmulation`
+* Saves RTC pointer in Clock as reference
+* Added example for `AnalogOut` and `Timer`
+* Bugfix for erasing elements of a `LinkedList`
+* Added example for `Clock`
+* Added example for `Buffer` and `Crc`
+* Bugfix for getting the correct element from `RingBuffer`
+* Added example for `Errorhandling`
+* Added ESP32 Spi Master
+* Added example for `Buffer` and `Crc`
+* Bugfix for getting the correct element from `RingBuffer`
+* Added example for `Errorhandling`
+
+## v24.7.0
+* BugFix DigitalOut toggle was not possible with inverted on
+* Added Stm32G4 define into stm32 header
+* Added AnalogIn to Stm32G4 MCU
+* Added Pwm to Stm32G4 MCU
+* Added External interrupt to Stm32G4 MCU
+* Added CriticalSSection to Stm32G4
+* Added Timer to Stm32G4 MCU
+* Added SysTick to Stm32G4 MCU
+* Added Gpio to Stm32G4 MCU
+* Added UART to Stm32G4 MCU
+* Added I2C Master to Stm32G4 MCU
+* Added SPI Master to Stm32G4 MCU
+* Updated ESP-HAL for IDF v5.2.2
+* TX-FIFO size for `Esp32Uart` configurable
+* Added SingleWire UART Support
+* Added OneWire Abstraction
+* Added OneWireMaster Layer
+* Added Stm32OneWireMaster implementation over UART Single Wire
+* Added OneWireMaster to Stm32G4 MCU
+* BugFix stm32 example
+* BugFix stmlsm6dso32i2c registers data size
+
+## v24.6.0
+* Added Stm32I2c Slave driver for STM32G0 chip
+* New documentation stm32 example
+
+## v24.5.0
+* Optimized gitlab-release job
+* Fixed missing setBusyWriting/Reading in Stm32Uart module
+* Added Stm32I2c Master for STM32G0 chip
+
+## v24.4.2
+* Corrected object names in stm32 get started guide
+* Added IAR flag für little endian in std workarrounds
 
 ## v24.4.1
 * No auto deploy github, pipeline creates release repository
@@ -96,7 +171,6 @@
 * Added Esp32S2Uart
 
 ## v21.3.0
-
 * Added protected set busy functions to hardware communication classes
 * Added unlock HAL to Stm32 communication classes
 * Added weekday function to Date class

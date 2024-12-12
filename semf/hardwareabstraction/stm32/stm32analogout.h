@@ -61,14 +61,14 @@ public:
 	 * @throws Start_HalBusy If the ST-HAL is busy.
 	 * @throws Start_HalTimeout If the ST-HAL times out.
 	 */
-	void start() const override;
+	void start() override;
 	/**
 	 * @copydoc AnalogOut::stop()
 	 * @throws Stop_HalError If the ST-HAL stumbles upon an error.
 	 * @throws Stop_HalBusy If the ST-HAL is busy.
 	 * @throws Stop_HalTimeout If the ST-HAL times out.
 	 */
-	void stop() const override;
+	void stop() override;
 	void setValue(uint32_t value) override;
 	/**
 	 * @brief Get the list with all analog outs.

@@ -27,6 +27,8 @@ template <typename T_SOH, typename T_VOLTAGE, typename T_CURRENT, typename T_TEM
 class BatteryStateOfHealth
 {
 public:
+	BatteryStateOfHealth() = default;
+	explicit BatteryStateOfHealth(const BatteryStateOfHealth& other) = delete;
 	virtual ~BatteryStateOfHealth() = default;
 
 	/**Updates the state of health.*/

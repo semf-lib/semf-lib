@@ -28,6 +28,8 @@ namespace semf
 class TickReceiver : public LinkedList<TickReceiver>::Node
 {
 public:
+	TickReceiver() = default;
+	explicit TickReceiver(const TickReceiver& other) = delete;
 	virtual ~TickReceiver() = default;
 
 	/**

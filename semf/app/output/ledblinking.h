@@ -30,6 +30,8 @@ public:
 		Blinking = 2  //<! Led is blinking.
 	};
 
+	LedBlinking() = default;
+	explicit LedBlinking(const LedBlinking& other) = delete;
 	virtual ~LedBlinking() = default;
 
 	/**

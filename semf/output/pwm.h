@@ -22,6 +22,8 @@ namespace semf
 class Pwm
 {
 public:
+	Pwm() = default;
+	explicit Pwm(const Pwm& other) = delete;
 	virtual ~Pwm() = default;
 
 	/**

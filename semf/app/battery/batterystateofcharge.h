@@ -28,6 +28,8 @@ template <typename T_SOC, typename T_VOLTAGE, typename T_CURRENT, typename T_TEM
 class BatteryStateOfCharge
 {
 public:
+	BatteryStateOfCharge() = default;
+	explicit BatteryStateOfCharge(const BatteryStateOfCharge& ohter) = delete;
 	virtual ~BatteryStateOfCharge() = default;
 
 	/**

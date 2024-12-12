@@ -36,8 +36,8 @@ public:
 	app::Clock& operator=(const DateTime& datetimeToSet) override;
 
 private:
-	/**Pointer to the real time clock*/
-	Rtc* m_rtc = nullptr;
+	/**Reference to the real time clock*/
+	Rtc& m_rtc;
 	/**Date time object containing rtc information, returned by now.*/
 	DateTime m_dateTime;
 };

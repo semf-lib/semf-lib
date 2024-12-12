@@ -24,6 +24,8 @@ namespace app
 class FrequencyIn
 {
 public:
+	FrequencyIn() = default;
+	explicit FrequencyIn(const FrequencyIn& other) = delete;
 	virtual ~FrequencyIn() = default;
 
 	/**Start reading the input frequency.*/

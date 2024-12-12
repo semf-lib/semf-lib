@@ -44,6 +44,8 @@ public:
 		WriteRead_SizeIsZero,
 	};
 
+	SpiSlaveHardware() = default;
+	explicit SpiSlaveHardware(const SpiSlaveHardware& other) = delete;
 	virtual ~SpiSlaveHardware() = default;
 
 	/**
