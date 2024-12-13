@@ -1,0 +1,43 @@
+@startuml semf blinky
+
+top to bottom direction
+
+title 
+semf Blinky Example STM32CubeIDE
+end title
+
+namespace app{
+    class myAppLogic
+    myAppLogic --> semf::app::LedBlinking
+    myAppLogic --> semf::app::DigitalIn
+
+
+    interface semf::app::LedBlinking {}
+    interface semf::app::DigitalIn {}
+
+}
+
+namespace bsp{
+    class semf::LedBlinking implements app.semf::app::LedBlinking
+    semf::LedBlinking --> semf::Gpio
+    semf::LedBlinking --> semf::app::TimeBase
+
+    class semf::DebouncedDigitalInPolling implements app.semf::app::DigitalIn
+    semf::DebouncedDigitalInPolling --> semf::Gpio
+
+    interface semf::Gpio {}
+    interface semf::app::TimeBase {}
+
+    class semf::TimeBase implements semf::app::TimeBase
+    semf::TimeBase --> semf::app::Timer
+
+    interface semf::app::Timer {}
+}
+
+namespace msp{
+    class Stm32Gpio implements bsp.semf::Gpio 
+
+    class semf::Stm32Systick implements bsp.semf::app::Timer
+}
+
+@enduml
